@@ -16,7 +16,7 @@ const StatusBadge = ({ status }) => (
 );
 
 export default function UserList() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isAdminOrManager } = useAuth();
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
@@ -191,24 +191,24 @@ export default function UserList() {
                         >
                           <Eye size={15} />
                         </Link>
+                        {isAdminOrManager && user.role !== 'admin' && (
+                          <Link
+                            to={`/users/${user._id}/edit`}
+                            className="p-1.5 rounded-lg text-gray-500 hover:bg-amber-50 hover:text-amber-600 transition-colors"
+                            title="Edit"
+                          >
+                            <Pencil size={15} />
+                          </Link>
+                        )}
                         {isAdmin && (
-                          <>
-                            <Link
-                              to={`/users/${user._id}/edit`}
-                              className="p-1.5 rounded-lg text-gray-500 hover:bg-amber-50 hover:text-amber-600 transition-colors"
-                              title="Edit"
-                            >
-                              <Pencil size={15} />
-                            </Link>
-                            <button
-                              onClick={() => setDeleteConfirm(user)}
-                              className="p-1.5 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors"
-                              title="Deactivate"
-                              disabled={user.status === 'inactive'}
-                            >
-                              <Trash2 size={15} />
-                            </button>
-                          </>
+                          <button
+                            onClick={() => setDeleteConfirm(user)}
+                            className="p-1.5 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+                            title="Deactivate"
+                            disabled={user.status === 'inactive'}
+                          >
+                            <Trash2 size={15} />
+                          </button>
                         )}
                       </div>
                     </td>
